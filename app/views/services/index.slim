@@ -1,0 +1,7 @@
+.list-group
+  - @services.each do |service|
+    a.list-group-item.list-group-item-action.flex-column.align-items-start href=url_for(service)
+      h5 #{ service.name }
+      div #{ service.protocol }://#{ service.address }:#{ service.port }
+br
+a.btn.btn-primary href=new_service_url New Service

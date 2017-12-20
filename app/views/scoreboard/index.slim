@@ -1,0 +1,20 @@
+- @teams.each do |team|
+  h2 Team #{team.number}
+  - @services.in_groups_of 6 do |group|
+    .card-deck
+      - group.each do |service|
+        - if service
+          - if service.checks.where(team: team).last
+            - if service.checks.where(team: team).last.up
+              .card.bg-success
+                .card-body
+                  h4.card-text.text-center #{service.name}
+            - else
+              .card.bg-danger
+                .card-body
+                  h4.card-text.text-center #{service.name}
+          - else
+            .card.bg-secondary
+              .card-body
+                h4.card-text.text-center #{service.name}
+  br
