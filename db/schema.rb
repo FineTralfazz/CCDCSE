@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180103025743) do
+ActiveRecord::Schema.define(version: 20180103030515) do
 
   create_table "checks", force: :cascade do |t|
     t.integer "team_id"
@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(version: 20180103025743) do
     t.integer "port"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "consecutive_fails"
   end
 
   create_table "teams", force: :cascade do |t|

@@ -6,18 +6,18 @@ class CheckJob < ApplicationJob
   def check_http(service, team)
     begin
       response = RestClient.get "http://#{ service.address team }:#{ service.port }"
-      response.code == 200
+      return response.code == 200, "Response: #{ response.code }"
     rescue
-      false
+      return false, 'Connection error'
     end
   end
 
   def check_https(service, team)
     begin
       response = RestClient.get "https://#{ service.address team }:#{ service.port }"
-      response.code == 200
+      return response.code == 200, "Response: #{ response.code }"
     rescue
-      false
+      return false, 'Connection error'
     end
   end
 
@@ -27,9 +27,9 @@ class CheckJob < ApplicationJob
       Net::SSH.start service.address(team), user.name, password: user.password do |ssh|
         ssh.exec! 'hostname'
       end
-      true
+      return true, "#{ user.name }/#{ user.password }"
     rescue
-      false
+      return false, "#{ user.name }/#{ user.password }"
     end
   end
 
@@ -37,24 +37,39 @@ class CheckJob < ApplicationJob
     begin
       resolver = Resolv::DNS.new nameserver: service.address(team)
       resolver.getaddress 'example.com'
-      true
+      return true, ''
     rescue
-      false
+      return false, 'Lookup failed'
     end
   end
 
   def perform(service, team)
     success = false
     if service.protocol == 'http'
-      success = check_http service, team
+      success, details = check_http service, team
     elsif service.protocol == 'https'
-      success = check_https service, team
+      success, details = check_https service, team
     elsif service.protocol == 'ssh'
-      success = check_ssh service, team
+      success, details = check_ssh service, team
     elsif service.protocol == 'dns'
-      success = check_dns service, team
+      success, details = check_dns service, team
     end
+
     points = success ? 6 : 0
-    Check.create team: team, service: service, up: success, points: points
+
+    if success
+      service.consecutive_fails = 0
+    else
+      if service.consecutive_fails == 5
+        service.consecutive_fails = 0
+        points = -25
+        details += ' [SLA violation]'
+      else
+        service.consecutive_fails += 1
+      end
+    end
+
+    service.save
+    Check.create team: team, service: service, up: success, points: points, details: details
   end
 end
