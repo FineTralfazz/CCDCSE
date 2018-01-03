@@ -1,5 +1,6 @@
 - @teams.each do |team|
-  h2 Team #{team.number}
+  a.text-dark href="/scoreboard/#{ team.number }"
+    h2 Team #{team.number}
   - @services.in_groups_of 5 do |group|
     .card-deck
       - group.each do |service|
