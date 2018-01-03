@@ -1,0 +1,27 @@
+.d-flex.justify-content-between
+  h1
+    | Team #{ @team.number }
+  h1
+    span.badge.badge-primary #{ @team.points } points
+h2 Checks
+table.table.table-hover.table-sm
+  thead
+    tr
+      th Time
+      th Name
+      th Points
+      th Details
+  tbody
+    - @checks.each do |check|
+      - if check.up
+        tr.table-success
+          td #{ check.created_at.strftime '%H:%M' }
+          td #{ check.service.name }
+          td #{ check.points }
+          td #{ check.details }
+      - else
+        tr.table-danger
+          td #{ check.created_at.strftime '%H:%M' }
+          td #{ check.service.name }
+          td #{ check.points }
+          td #{ check.details }
