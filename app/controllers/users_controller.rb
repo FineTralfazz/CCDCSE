@@ -10,12 +10,12 @@ class UsersController < ApplicationController
         file.write(params[:file].read())
       end
       CSV.foreach path do |row|
-        user = User.find_or_create_by team_id: params[:team_id], name: row[0]
-        user.password = row[1]
+        user = User.find_or_create_by team_id: params[:team_id], name: row[0].strip
+        user.password = row[1].strip
         user.save
       end
       File.delete(path)
-      redirect_to users_url, notice: "Uploaded users."
+      redirect_to '/users', notice: "Uploaded users."
     else
       @team = Team.find params[:team_id]
     end
