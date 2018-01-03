@@ -1,3 +1,11 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
+function check_updates() {
+    $.getJSON('/scoreboard/last_check', function(data) {
+        if($('meta[name="last_check"]').attr('content') != data['last_check']) {
+            window.location = window.location;
+        }
+    });
+}
+
+$(function() {
+    setInterval(check_updates, 1000);
+});

@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   root 'scoreboard#index'
   scope :scoreboard do
     get '/', to: 'scoreboard#index'
+    get 'last_check', to: 'scoreboard#last_check'
     get ':team_id', to: 'scoreboard#show'
   end
 
