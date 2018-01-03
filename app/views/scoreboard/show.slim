@@ -15,13 +15,13 @@ table.table.table-hover.table-sm
     - @checks.each do |check|
       - if check.up
         tr.table-success
-          td #{ check.created_at.strftime '%H:%M' }
+          td #{ check.created_at.localtime.strftime '%H:%M' }
           td #{ check.service.name }
           td #{ check.points }
           td #{ check.details }
       - else
         tr.table-danger
-          td #{ check.created_at.strftime '%H:%M' }
+          td #{ check.created_at.localtime.strftime '%H:%M' }
           td #{ check.service.name }
           td #{ check.points }
           td #{ check.details }
