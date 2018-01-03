@@ -71,5 +71,7 @@ class CheckJob < ApplicationJob
 
     service.save
     Check.create team: team, service: service, up: success, points: points, details: details
+    team.points += points
+    team.save
   end
 end
