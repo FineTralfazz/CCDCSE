@@ -1,7 +1,15 @@
+h1 Services
 .list-group
   - @services.each do |service|
-    a.list-group-item.list-group-item-action.flex-column.align-items-start href=url_for(service)
-      h5 #{ service.name }
-      div #{ service.protocol }://#{ service.address }:#{ service.port }
+    .list-group-item.flex-column.align-items-start
+      .d-flex.justify-content-between
+        h5 #{ service.name }
+        a.btn.btn-danger.btn-sm href=url_for(service) data-method="delete" Delete
+      div
+        span.badge.badge-info #{ service.protocol }
+        | &nbsp;
+        span.badge.badge-info #{ service.address_format }
+        | &nbsp;
+        span.badge.badge-info #{ service.port }
 br
 a.btn.btn-primary href=new_service_url New Service

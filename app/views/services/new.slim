@@ -1,0 +1,23 @@
+h1 Create Service
+form action=services_path method="post"
+  = hidden_field_tag :authenticity_token, form_authenticity_token
+  .form-group
+    label Name
+    input.form-control type="text" placeholder="Main Website" name="name" required=""
+  .form-group
+    label Protocol
+    select.form-control#protocol name="protocol" required=""
+      option http
+      option https
+      option ssh
+      option dns
+  .form-group
+    label Address
+    input.form-control type="text" placeholder="10.250.10?.66" name="address_format" required=""
+    small.form-text.text-muted
+      | The '?' character will be replaced with the team number.
+  .form-group
+      label Port
+      input.form-control type="text" placeholder="80" name="port" required=""
+      small.form-text.text-muted
+  button.btn.btn-primary type="submit" Create

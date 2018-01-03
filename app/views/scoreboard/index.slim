@@ -1,6 +1,6 @@
 - @teams.each do |team|
   h2 Team #{team.number}
-  - @services.in_groups_of 6 do |group|
+  - @services.in_groups_of 5 do |group|
     .card-deck
       - group.each do |service|
         - if service
@@ -17,4 +17,5 @@
             .card.bg-secondary
               .card-body
                 h4.card-text.text-center #{service.name}
+    br
   br

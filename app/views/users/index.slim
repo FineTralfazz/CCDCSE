@@ -1,0 +1,16 @@
+- @teams.each do |team|
+  .d-flex.justify-content-between
+    h2 Team #{ team.number }
+    div
+      a.btn.btn-primary href="/users/upload/#{ team.number }" Upload CSV
+  br
+  table.table.table-hover.table-sm
+    thead
+      tr
+        th Username
+        th Password
+    tbody
+      - team.users.each do |user|
+        tr
+          td #{ user.name }
+          td #{ user.password }
