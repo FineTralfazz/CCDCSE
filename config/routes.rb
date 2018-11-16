@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   scope :scoreboard do
     get '/', to: 'scoreboard#index'
     get 'last_check', to: 'scoreboard#last_check'
+    get 'as_json', to: 'scoreboard#as_json'
     get ':team_id', to: 'scoreboard#show'
   end
 

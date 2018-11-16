@@ -7,6 +7,22 @@ class ScoreboardController < ApplicationController
     @last_check = get_last_check
   end
 
+  def as_json
+    result = { teams: [] }
+    services = Service.order(id: :asc).all
+    Team.order(number: :asc).all.each do |team|
+      team_result = { number: team.number, points: team.points }
+      team_result[:services] = []
+      services.each do |service|
+        last_check = service.checks.where(team: team).last
+        service_result = { name: service.name, up: last_check.up }
+        team_result[:services] << service_result
+      end
+      result[:teams] << team_result
+    end
+    render json: result
+  end
+
   def show
     @team = Team.find_by number: params[:team_id]
     @checks = Check.where(team: @team).order created_at: :desc
