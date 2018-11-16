@@ -1,8 +1,8 @@
 class ScoreboardController < ApplicationController
   def index
-    @teams = Team.all
-    @services = Service.all
-    @last_check = Check.last.created_at
+    @teams = Team.order(number: :asc).all
+    @services = Service.order(id: :asc).all
+    @last_check = get_last_check
   end
 
   def show
@@ -12,5 +12,15 @@ class ScoreboardController < ApplicationController
 
   def last_check
     render json: {last_check: "#{ Check.last.created_at }"}
+  end
+
+  private
+  def get_last_check
+    last = Check.last
+    if last
+      last.created_at
+    else
+      nil
+    end
   end
 end
