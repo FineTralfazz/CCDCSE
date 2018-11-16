@@ -35,6 +35,7 @@ gem 'sidekiq'
 gem 'net-ssh'
 gem 'csv'
 gem 'pg'
+gem 'ruby_smb'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

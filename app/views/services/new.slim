@@ -11,6 +11,7 @@ form action=services_path method="post"
       option https
       option ssh
       option dns
+      option smb
   .form-group
     label Address
     input.form-control type="text" placeholder="10.250.10?.66" name="address_format" required=""
@@ -19,5 +20,14 @@ form action=services_path method="post"
   .form-group
       label Port
       input.form-control type="text" placeholder="80" name="port" required=""
-      small.form-text.text-muted
+  .form-group
+    label Argument 1
+    input.form-control type="text" name="arg1"
+    small.form-text.text-muted
+      | This argument is only necessary with some protocols.
+  .form-group
+    label Argument 2
+    input.form-control type="text" name="arg2"
+    small.form-text.text-muted
+      | This argument is only necessary with some protocols.
   button.btn.btn-primary type="submit" Create

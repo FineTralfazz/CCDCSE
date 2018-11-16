@@ -6,7 +6,7 @@ class ScoreboardController < ApplicationController
   end
 
   def show
-    @team = Team.find params[:team_id]
+    @team = Team.find_by number: params[:team_id]
     @checks = Check.where(team: @team).order created_at: :desc
   end
 

@@ -3,6 +3,10 @@ require 'resolv'
 class CheckJob < ApplicationJob
   queue_as :default
 
+  def random_user(team)
+    return team.users.order('RANDOM()').first
+  end
+
   def check_http(service, team)
     begin
       response = RestClient.get "http://#{ service.address team }:#{ service.port }"
@@ -23,7 +27,7 @@ class CheckJob < ApplicationJob
 
   def check_ssh(service, team)
     begin
-      user = team.users.order('RANDOM()').first
+      user = random_user team
       Net::SSH.start service.address(team), user.name, password: user.password do |ssh|
         ssh.exec! 'hostname'
       end
@@ -43,6 +47,26 @@ class CheckJob < ApplicationJob
     end
   end
 
+  def check_smb(service, team)
+    begin
+      user = random_user team
+      sock = TCPSocket.new service.address(team), service.port
+      dispatcher = RubySMB::Dispatcher::Socket.new sock
+      client = RubySMB::Client.new dispatcher, smb1: true, smb2: true, username: user.name, password: user.password
+      client.negotiate
+      client.authenticate
+      tree = client.tree_connect "\\\\#{ service.address(team) }\\#{ service.arg1 }"
+      log = ''
+      tree.list.each do |f|
+        log += "#{ f.file_name.encode('utf-8') }, "
+      end
+      return true, log
+    rescue => e
+      return false, "Unable to connect: #{ e.message }"
+      puts e.backtrace
+    end
+  end
+
   def perform(service, team)
     success = false
     if service.protocol == 'http'
@@ -53,6 +77,8 @@ class CheckJob < ApplicationJob
       success, details = check_ssh service, team
     elsif service.protocol == 'dns'
       success, details = check_dns service, team
+    elsif service.protocol == 'smb'
+      success, details = check_smb service, team
     end
 
     points = success ? 6 : 0

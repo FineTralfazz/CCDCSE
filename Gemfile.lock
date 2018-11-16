@@ -44,6 +44,7 @@ GEM
     autoprefixer-rails (7.2.3)
       execjs
     bcrypt (3.1.11)
+    bindata (2.4.4)
     bindex (0.5.0)
     bootstrap (4.0.0.beta2.1)
       autoprefixer-rails (>= 6.0.3)
@@ -146,6 +147,11 @@ GEM
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
     ruby_dep (1.5.0)
+    ruby_smb (1.0.5)
+      bindata
+      rubyntlm
+      windows_error
+    rubyntlm (0.6.2)
     rubyzip (1.2.1)
     sass (3.5.4)
       sass-listen (~> 4.0.0)
@@ -204,6 +210,7 @@ GEM
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
+    windows_error (0.1.2)
     xpath (2.1.0)
       nokogiri (~> 1.3)
 
@@ -224,6 +231,7 @@ DEPENDENCIES
   puma (~> 3.7)
   rails (~> 5.1.4)
   rest-client
+  ruby_smb
   sass-rails (~> 5.0)
   selenium-webdriver
   sidekiq
