@@ -1,4 +1,6 @@
 class ServicesController < ApplicationController
+  http_basic_authenticate_with name: 'admin', password: ENV['CCDCSE_ADMIN_PASS']
+
   def index
     @services = Service.all
   end

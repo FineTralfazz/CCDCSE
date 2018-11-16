@@ -1,4 +1,6 @@
 class ScoreboardController < ApplicationController
+  http_basic_authenticate_with name: 'admin', password: ENV['CCDCSE_ADMIN_PASS'], except: [:index, :last_check]
+
   def index
     @teams = Team.order(number: :asc).all
     @services = Service.order(id: :asc).all

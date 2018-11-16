@@ -1,0 +1,9 @@
+h1 Admin
+a.btn.btn-primary href='/sidekiq' Sidekiq
+| &nbsp;
+a.btn.btn-primary href='/services/score_all' Score all services immediately
+hr
+h3 DANGER ZONE!
+form action="/admin/reset_points" method="post"
+  = hidden_field_tag :authenticity_token, form_authenticity_token
+  button.btn.btn-danger type="submit" Reset all points and checks
