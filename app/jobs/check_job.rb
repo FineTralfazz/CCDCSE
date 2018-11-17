@@ -28,7 +28,7 @@ class CheckJob < ApplicationJob
   def check_ssh(service, team)
     begin
       user = random_user team
-      Net::SSH.start service.address(team), user.name, password: user.password do |ssh|
+      Net::SSH.start service.address(team), user.name, password: user.password, timeout: 5 do |ssh|
         ssh.exec! 'hostname'
       end
       return true, "#{ user.name }/#{ user.password }"
