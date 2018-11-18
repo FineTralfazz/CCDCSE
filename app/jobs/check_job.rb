@@ -61,6 +61,8 @@ class CheckJob < ApplicationJob
       tree.list.each do |f|
         log += "#{ f.file_name.encode('utf-8') }, "
       end
+      tree.disconnect!
+      client.disconnect!
       return true, log
     rescue => e
       return false, "Unable to connect: #{ e.message }"
