@@ -9,7 +9,7 @@ class CheckJob < ApplicationJob
 
   def check_http(service, team)
     begin
-      response = RestClient.get "http://#{ service.address team }:#{ service.port }"
+      response = RestClient::Request.execute method: :get, url: "http://#{ service.address team }:#{ service.port }", timeout: 5
       return response.code == 200, "Response: #{ response.code }"
     rescue
       return false, 'Connection error'
@@ -18,7 +18,7 @@ class CheckJob < ApplicationJob
 
   def check_https(service, team)
     begin
-      response = RestClient.get "https://#{ service.address team }:#{ service.port }"
+      response = RestClient::Request.execute method: :get, url: "https://#{ service.address team }:#{ service.port }", timeout: 5
       return response.code == 200, "Response: #{ response.code }"
     rescue
       return false, 'Connection error'
@@ -40,6 +40,7 @@ class CheckJob < ApplicationJob
   def check_dns(service, team)
     begin
       resolver = Resolv::DNS.new nameserver: service.address(team)
+      resolver.timeouts = 5
       resolver.getaddress 'example.com'
       return true, ''
     rescue
