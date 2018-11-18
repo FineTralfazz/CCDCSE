@@ -53,7 +53,7 @@ class CheckJob < ApplicationJob
       user = random_user team
       sock = TCPSocket.new service.address(team), service.port
       dispatcher = RubySMB::Dispatcher::Socket.new sock, read_timeout: 5
-      client = RubySMB::Client.new dispatcher, smb1: true, smb2: true, username: user.name, password: user.password
+      client = RubySMB::Client.new dispatcher, smb1: true, smb2: true, username: user.name, password: user.password, domain: service.arg2
       client.negotiate
       client.authenticate
       tree = client.tree_connect "\\\\#{ service.address(team) }\\#{ service.arg1 }"
