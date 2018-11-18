@@ -28,7 +28,7 @@ class CheckJob < ApplicationJob
   def check_ssh(service, team)
     begin
       user = random_user team
-      Net::SSH.start service.address(team), user.name, password: user.password, timeout: 5 do |ssh|
+      Net::SSH.start service.address(team), user.name, password: user.password, timeout: 5, number_of_password_prompts: 0, non_interactive: true do |ssh|
         ssh.exec! 'hostname'
       end
       return true, "#{ user.name }/#{ user.password }"
@@ -51,7 +51,7 @@ class CheckJob < ApplicationJob
     begin
       user = random_user team
       sock = TCPSocket.new service.address(team), service.port
-      dispatcher = RubySMB::Dispatcher::Socket.new sock
+      dispatcher = RubySMB::Dispatcher::Socket.new sock, read_timeout: 5
       client = RubySMB::Client.new dispatcher, smb1: true, smb2: true, username: user.name, password: user.password
       client.negotiate
       client.authenticate
@@ -82,20 +82,22 @@ class CheckJob < ApplicationJob
     end
 
     points = success ? 6 : 0
-
-    if success
-      service.consecutive_fails = 0
-    else
-      if service.consecutive_fails == 5
+    service.with_lock do
+      service.reload
+      if success
         service.consecutive_fails = 0
-        points = -25
-        details += ' [SLA violation]'
       else
-        service.consecutive_fails += 1
+        if service.consecutive_fails == 5
+          service.consecutive_fails = 0
+          points = -25
+          details += ' [SLA violation]'
+        else
+          service.consecutive_fails += 1
+        end
       end
+      service.save
     end
 
-    service.save
     Check.create team: team, service: service, up: success, points: points, details: details
     team.with_lock do
       team.reload
