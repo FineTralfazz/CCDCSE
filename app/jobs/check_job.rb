@@ -70,6 +70,15 @@ class CheckJob < ApplicationJob
     end
   end
 
+  def is_sla_violation(service, team)
+    Check.where(service: service, team: team).last(4).each do |check|
+      if check.sla_violation
+        return false
+      end
+    end
+    return true
+  end
+
   def perform(service, team)
     success = false
     if service.protocol == 'http'
@@ -85,23 +94,17 @@ class CheckJob < ApplicationJob
     end
 
     points = success ? 6 : 0
-    service.with_lock do
-      service.reload
-      if success
-        service.consecutive_fails = 0
-      else
-        if service.consecutive_fails == 5
-          service.consecutive_fails = 0
-          points = -25
-          details += ' [SLA violation]'
-        else
-          service.consecutive_fails += 1
-        end
+    sla_violation = false
+
+    unless success
+      sla_violation = is_sla_violation service, team
+      if sla_violation
+        details += ' [SLA violation]'
+        points = -25
       end
-      service.save
     end
 
-    Check.create team: team, service: service, up: success, points: points, details: details
+    Check.create team: team, service: service, up: success, points: points, details: details, sla_violation: sla_violation
     team.with_lock do
       team.reload
       team.points = team.points + points
