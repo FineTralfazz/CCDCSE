@@ -23,7 +23,7 @@ class CheckJob < ApplicationJob
 
   def check_https(service, team)
     begin
-      response = RestClient::Request.execute method: :get, url: "https://#{ service.address team }", timeout: 5
+      response = RestClient::Request.execute method: :get, url: "https://#{ service.address team }", timeout: 5, verify_ssl: OpenSSL::SSL::VERIFY_NONE
       if service.arg1
         match = response.body.include? service.arg1
         return response.code == 200 && match, "Response: #{ response.code }, content match: #{ match }"
