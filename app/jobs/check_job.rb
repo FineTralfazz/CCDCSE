@@ -10,7 +10,12 @@ class CheckJob < ApplicationJob
   def check_http(service, team)
     begin
       response = RestClient::Request.execute method: :get, url: "http://#{ service.address team }:#{ service.port }", timeout: 5
-      return response.code == 200, "Response: #{ response.code }"
+      if service.arg1
+        match = response.body.include? service.arg1
+        return response.code == 200 && match, "Response: #{ response.code }, content match: #{ match }"
+      else
+        return response.code == 200, "Response: #{ response.code }"
+      end
     rescue
       return false, 'Connection error'
     end
@@ -19,7 +24,12 @@ class CheckJob < ApplicationJob
   def check_https(service, team)
     begin
       response = RestClient::Request.execute method: :get, url: "https://#{ service.address team }:#{ service.port }", timeout: 5
-      return response.code == 200, "Response: #{ response.code }"
+      if service.arg1
+        match = response.body.include? service.arg1
+        return response.code == 200 && match, "Response: #{ response.code }, content match: #{ match }"
+      else
+        return response.code == 200, "Response: #{ response.code }"
+      end
     rescue
       return false, 'Connection error'
     end
