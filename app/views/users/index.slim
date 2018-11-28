@@ -3,14 +3,16 @@
     h2 Team #{ team.number }
     div
       a.btn.btn-primary href="/users/upload/#{ team.number }" Upload CSV
-  br
-  table.table.table-hover.table-sm
-    thead
-      tr
-        th Username
-        th Password
-    tbody
-      - team.users.each do |user|
+  details
+    summary Users
+    table.table.table-hover.table-sm
+      thead
         tr
-          td #{ user.name }
-          td #{ user.password }
+          th Username
+          th Password
+      tbody
+        - team.users.each do |user|
+          tr
+            td #{ user.name }
+            td #{ user.password }
+  hr
