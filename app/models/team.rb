@@ -1,6 +1,6 @@
 class Team < ApplicationRecord
-  has_many :checks
-  has_many :users
+  has_many :checks, dependent: :destroy
+  has_many :users, dependent: :destroy
   after_initialize :init
 
   def init
