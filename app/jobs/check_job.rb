@@ -48,14 +48,25 @@ class CheckJob < ApplicationJob
   end
 
   def check_dns(service, team)
-    begin
-      resolver = Resolv::DNS.new nameserver: service.address(team)
-      resolver.timeouts = 5
-      resolver.getaddress 'example.com'
-      return true, ''
-    rescue
-      return false, 'Lookup failed'
+    domains = ['example.com']
+    if service.arg1
+      unless service.arg1.empty?
+        domains = service.arg1.split ','
+      end
     end
+
+    log = ''
+    domains.each do |domain|
+      begin
+        resolver = Resolv::DNS.new nameserver: service.address(team)
+        resolver.timeouts = 5
+        ip = resolver.getaddress(domain).to_s
+        log += "#{ domain }=#{ ip } "
+      rescue
+        return false, "Lookup failed for #{ domain }"
+      end
+    end
+    return true, log
   end
 
   def check_smb(service, team)
