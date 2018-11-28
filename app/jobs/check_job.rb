@@ -9,7 +9,7 @@ class CheckJob < ApplicationJob
 
   def check_http(service, team)
     begin
-      response = RestClient::Request.execute method: :get, url: "http://#{ service.address team }:#{ service.port }", timeout: 5
+      response = RestClient::Request.execute method: :get, url: "http://#{ service.address team }", timeout: 5
       if service.arg1
         match = response.body.include? service.arg1
         return response.code == 200 && match, "Response: #{ response.code }, content match: #{ match }"
@@ -23,7 +23,7 @@ class CheckJob < ApplicationJob
 
   def check_https(service, team)
     begin
-      response = RestClient::Request.execute method: :get, url: "https://#{ service.address team }:#{ service.port }", timeout: 5
+      response = RestClient::Request.execute method: :get, url: "https://#{ service.address team }", timeout: 5
       if service.arg1
         match = response.body.include? service.arg1
         return response.code == 200 && match, "Response: #{ response.code }, content match: #{ match }"
@@ -61,7 +61,7 @@ class CheckJob < ApplicationJob
   def check_smb(service, team)
     begin
       user = random_user team
-      sock = TCPSocket.new service.address(team), service.port
+      sock = TCPSocket.new service.address(team), 445
       dispatcher = RubySMB::Dispatcher::Socket.new sock, read_timeout: 5
       client = RubySMB::Client.new dispatcher, smb1: true, smb2: true, username: user.name, password: user.password, domain: service.arg2
       client.negotiate

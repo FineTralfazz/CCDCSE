@@ -29,6 +29,6 @@ class ServicesController < ApplicationController
 
   private
   def services_params
-    params.permit :name, :protocol, :address_format, :port, :arg1, :arg2
+    params.permit :name, :protocol, :address_format, :arg1, :arg2
   end
 end
