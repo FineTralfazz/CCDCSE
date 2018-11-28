@@ -25,7 +25,7 @@ class ScoreboardController < ApplicationController
 
   def show
     @team = Team.find_by number: params[:team_id]
-    @checks = Check.where(team: @team).order created_at: :desc
+    @checks = Check.where(team: @team).order(created_at: :desc).limit(1000)
   end
 
   def last_check
