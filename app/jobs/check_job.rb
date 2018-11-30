@@ -93,7 +93,7 @@ class CheckJob < ApplicationJob
 
   def is_sla_violation(service, team)
     Check.where(service: service, team: team).last(4).each do |check|
-      if check.sla_violation
+      if check.sla_violation || check.up
         return false
       end
     end
