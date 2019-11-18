@@ -1,7 +1,16 @@
 h1 Admin
-a.btn.btn-primary href='/sidekiq' Sidekiq
-| &nbsp;
-a.btn.btn-primary href='/services/score_all' Score all services immediately
+form action="/admin/toggle_scoring" method="post"
+  = hidden_field_tag :authenticity_token, form_authenticity_token
+  - if @scoring_enabled
+    button.btn.btn-danger type="submit" Disable scoring
+  - else
+    button.btn.btn-success type="submit" Enable scoring
+form action="/admin/score_all" method="post"
+  = hidden_field_tag :authenticity_token, form_authenticity_token
+  - if @scoring_enabled
+    button.btn.btn-primary type="submit" Score all services immediately
+  - else
+    button.btn.btn-primary type="submit" disabled="" Score all services immediately
 hr
 h3 DANGER ZONE!
 form action="/admin/reset_points" method="post"

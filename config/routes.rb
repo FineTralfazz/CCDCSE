@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   require 'sidekiq/web'
+  require 'sidekiq-scheduler/web'
   Sidekiq::Web.use Rack::Auth::Basic do |username, password|
-    username == 'admin' && password == ENV['CCDCSE_ADMIN_PASS']
+    username == 'admin' && password == ENV['CCDCSE_ADMIN_PASSWORD']
   end
   mount Sidekiq::Web => '/sidekiq'
 
@@ -15,7 +16,6 @@ Rails.application.routes.draw do
     get ':team_id', to: 'scoreboard#show'
   end
 
-  get 'services/score_all', 'services#score_all'
   resources 'services'
 
   resources 'teams'
@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   scope :admin do
     get '/', to: 'admin#index'
     post 'reset_points', to: 'admin#reset_points'
-    post 'game_status', to: 'admin#game_status'
+    post 'toggle_scoring', to: 'admin#toggle_scoring'
+    post 'score_all', to: 'admin#score_all'
   end
 end

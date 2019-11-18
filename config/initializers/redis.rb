@@ -1,0 +1,1 @@
+Redis.current = Redis.new(url: ENV['JOB_WORKER_URL'])

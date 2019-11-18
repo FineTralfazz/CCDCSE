@@ -3,15 +3,6 @@ class ServicesController < ApplicationController
     @services = Service.all
   end
 
-  def score_all
-    Service.all.each do |service|
-      Team.all.each do |team|
-        CheckJob.perform_later service, team
-      end
-    end
-    render html: 'Scoring tasks queued.'
-  end
-
   def new
   end
 
