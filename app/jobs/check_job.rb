@@ -92,12 +92,14 @@ class CheckJob < ApplicationJob
   end
 
   def is_sla_violation(service, team)
-    Check.where(service: service, team: team).last(4).each do |check|
+    checks = Check.where(service: service, team: team).last 4
+    checks.each do |check|
       if check.sla_violation || check.up
         return false
       end
     end
-    return true
+    # If there are fewer than 4 checks, it's not an SLA violation
+    return checks.count == 4
   end
 
   def perform(service, team)
