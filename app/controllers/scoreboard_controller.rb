@@ -1,5 +1,5 @@
 class ScoreboardController < ApplicationController
-  http_basic_authenticate_with name: 'admin', password: ENV['CCDCSE_ADMIN_PASS'], except: [:index, :last_check, :as_json]
+  skip_before_action :require_auth, only: [:index, :last_check, :as_json]
 
   def index
     @teams = Team.order(number: :asc).all
