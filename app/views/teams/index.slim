@@ -1,0 +1,9 @@
+h1 Teams
+.list-group
+  - @teams.each do |team|
+    .list-group-item.flex-column.align-items-start
+      .d-flex.justify-content-between
+        h5 #{ team.number }
+        a.btn.btn-danger.btn-sm href=url_for(team) data-method="delete" Delete
+br
+a.btn.btn-primary href=new_team_url New Team

@@ -18,6 +18,8 @@ Rails.application.routes.draw do
   get 'services/score_all', 'services#score_all'
   resources 'services'
 
+  resources 'teams'
+
   scope :users do
     get '/', to: 'users#index'
     get 'upload/:team_id', to: 'users#upload'
