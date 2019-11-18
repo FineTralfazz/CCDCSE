@@ -28,14 +28,14 @@ gem 'bcrypt', '~> 3.1.7'
 # gem 'capistrano-rails', group: :development
 
 gem 'bootstrap', '~> 4.3.1'
-gem 'slim-rails'
-gem 'jquery-rails'
-gem 'rest-client'
-gem 'sidekiq'
-gem 'net-ssh'
-gem 'csv'
-gem 'pg'
-gem 'ruby_smb'
+gem 'slim-rails', '~> 3.2.0'
+gem 'jquery-rails', '~> 4.3.5'
+gem 'rest-client', '~> 2.1.0'
+gem 'sidekiq', '~> 6.0.3'
+gem 'net-ssh', '~> 5.2.0'
+gem 'csv', '~> 3.1.2'
+gem 'pg', '~> 1.1.4'
+gem 'ruby_smb', '~> 1.1.0'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
