@@ -21,10 +21,18 @@ form action=services_path method="post"
     label Argument 1
     input.form-control type="text" name="arg1"
     small.form-text.text-muted
-      | This argument is only necessary with some protocols.
+      | Only necessary with some protocols.
+      ul
+        li DNS: Optional. The list of domain names to look up. Comma separated, no whitespace. If empty, will look up example.com.
+        li HTTP/S: Optional. This string must be found in the response for the check to succeed. If empty, any 200 OK response will pass.
+        li SMB: Required. The name of the SMB share.
+        li SSH: Ignored.
   .form-group
     label Argument 2
     input.form-control type="text" name="arg2"
     small.form-text.text-muted
-      | This argument is only necessary with some protocols.
+      | Only necessary with some protocols.
+      ul
+        li SMB: The domain name used to authenticate.
+        li All others: Ignored.
   button.btn.btn-primary type="submit" Create
