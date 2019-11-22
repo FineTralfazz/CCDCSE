@@ -51,7 +51,7 @@ class CheckJob < ApplicationJob
     domains = ['example.com']
     if service.arg1
       unless service.arg1.empty?
-        domains = service.arg1.split ','
+        domains = service.arg1.split(',').collect(&:strip)
       end
     end
 
